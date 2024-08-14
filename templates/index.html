@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/styles.css" type="text/css">
+    <title>Student Loan Repayment Optimiser</title>
+  </head>
+  <body>
+        <h1>Student Loan Repayment Optimiser</h1> 
+
+        <form name="passdata" action="." method="POST">
+            <div class="form_component">
+              <label for="bal1"> Loan Balance (GBP) </label>
+              <input type="number" id="bal1" name="bal1" placeholder="30000">
+            </div>
+
+            <div class="form_component">
+              <label for="years_left"> Years Left on Loan (Years) </label>
+              <input type="number" id="years_left" name="yr" placeholder="28">
+            </div>
+
+            <div class="form_component">
+              <label for="initial_salary"> Initial Salary (GBP) </label>
+              <input type="number" id="initial_salary" name="initsal" placeholder="40000">
+            </div>
+
+            <div class="form_component">
+              <label for="salary_boost"> Salary Boost (%) </label>
+              <input type="text" id="salary_boost" name="salbooist" placeholder="0.01,0.02,0.04">
+            </div>
+
+            <div class="form_component">
+              <label for="investment_interest"> Investment Interest (%) </label>
+              <input type="text" id="investment_interest" name="yo" placeholder="0.01,0.02,0.04,0.06">
+            </div>
+
+            <div class="form_component">
+              <input type="submit" id="btn1" name="btn1" value="Click For Salary in 20 years">
+            </div>
+        </form>
+  </body>
+</html>
