@@ -8,6 +8,10 @@ app.config["SECRET_KEY"] = "your secret key"
 
 @app.route('/', methods = ["GET", "POST"])
 def index():
+    return render_template("index.html")
+
+@app.route("/calculate", methods=["GET","POST"])
+def calculate():
     if request.method == "POST":
         balance = int(request.form["bal1"])
         years_left = int(request.form["yr"])
@@ -29,8 +33,21 @@ def index():
             for k in range(int(len(h))):
                 investment_interest.append(float(h[k]))
 
-        return analyse(balance=balance,years_left=years_left,initial_salary=initial_salary,salary_boost=salary_boost,investment_interest=investment_interest)
-    return render_template("index.html")
+        df = analyse(balance=balance,years_left=years_left,initial_salary=initial_salary,salary_boost=salary_boost,investment_interest=investment_interest)
+
+        saved_investment = df["Money Saved by Paying Early (Considers Investment)"].sum()
+        saved_inflation = df["Money Saved by Paying Early (Considers Inflation)"].sum()
+
+        if saved_investment > 0 and saved_inflation > 0:
+            answer = "should pay it off early"
+        elif saved_investment < 0 and saved_inflation > 0:
+            answer = "would save more by investing lump sum"
+        elif saved_investment > 0 and saved_inflation < 0:
+            answer = "shouldn't be printing as this never happens!"
+        else:
+            answer = "should not pay it off early"
+    
+        return render_template("answer_page.html", answer = answer, tables = [df.to_html(classes="data")], titles=df.columns.values)
 
 def analyse(balance, years_left, initial_salary, salary_boost,investment_interest):
     #Would like to randomly compute if worth paying off student loan
@@ -155,21 +172,9 @@ def analyse(balance, years_left, initial_salary, salary_boost,investment_interes
     df["Money Saved by Paying Early (Considers Investment)"] = final_money_saved_investment
     df["Loan balance"] = final_loan_balance
 
-    saved_investment = df["Money Saved by Paying Early (Considers Investment)"].sum()
-    saved_inflation = df["Money Saved by Paying Early (Considers Inflation)"].sum()
-
-    if saved_investment > 0 and saved_inflation > 0:
-        answer = "should pay it off early"
-    elif saved_investment < 0 and saved_inflation > 0:
-        answer = "would save more by investing lump sum"
-    elif saved_investment > 0 and saved_inflation < 0:
-        answer = "shouldn't be printing as this never happens!"
-    else:
-        answer = "should not pay it off early"
-
     #df.to_csv("ouput.csv")
 
-    return answer
+    return df
 
 
 if __name__ == "__main__":
